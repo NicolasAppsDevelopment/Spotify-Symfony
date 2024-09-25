@@ -19,6 +19,7 @@ class Track
     private string $type;
     private string $uri;
     private ?string $pictureLink;
+    private array $artists;
 
     public function __construct(
         int $discNumber,
@@ -35,7 +36,8 @@ class Track
         int $trackNumber,
         string $type,
         string $uri,
-        ?string $pictureLink
+        ?string $pictureLink,
+        array $artists
     ) {
         $this->discNumber = $discNumber;
         $this->durationMs = $durationMs;
@@ -52,6 +54,7 @@ class Track
         $this->type = $type;
         $this->uri = $uri;
         $this->pictureLink = $pictureLink;
+        $this->artists = $artists;
     }
 
     // Getters for all properties
@@ -128,5 +131,10 @@ class Track
     public function getPictureLink(): string
     {
         return $this->pictureLink;
+    }
+
+    public function getArtists(): array
+    {
+        return $this->artists;
     }
 }

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <title>Détails</title>
+        <link href="{{ asset('styles/app.css') }}" rel="stylesheet"/>
+    </head>
+    <body>
+        <div class="container">
+            <div class="container-card">
+                <img src="{{ trackDetails.pictureLink }}">
+                <h1> {{ trackDetails.name }} </h1>
+                <h2> {{ trackDetails.artists }} </h2>
+                <p> 🔥 Popularité : {{ trackDetails.popularity }}/100 </p>
+                <p> 🕓 Durée : {{ trackDetails.durationMs / 1000 }} secondes </p>
+                <p> 🎵 N° de piste : {{ trackDetails.trackNumber }} </p>
+                <p> 💿 N° du disque : {{ trackDetails.discNumber }} </p>
+                <p> 🔞 Restricition d'âge : {{ trackDetails.explicit ? "Oui" : "Non" }} </p>
+
+                <audio controls>
+                    <source src="{{ trackDetails.previewUrl }}">
+                </audio>
+
+                <a href="{{ trackDetails.spotifyUrl }}">Afficher sur Spotify ></a>
+            </div>
+
+            <div class="container-card">
+                <h1>Recommendations</h1>
+                <div class="container">
+                    {% for item in recomandedTracks %}
+                        <a class="item" href="/track/details?id={{ item.id }}">
+                            <div class="overlay">
+                                <div>
+                                    <h2>{{ item.name }}</h2>
+                                    <h3>{{ item.artistName }}</h3>
+                                </div>
+                            </div>
+                            <img class="background" src="{{ item.pictureLink }}" alt="image titre {{ item.name }}">
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

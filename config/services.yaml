@@ -25,5 +25,10 @@ services:
             $clientId: '%env(SPOTIFY_CLIENT_ID)%'
             $clientSecret: '%env(SPOTIFY_CLIENT_SECRET)%'
 
+
+    App\Factory\ArtistFactory:
+        autowire: true
+
+
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
