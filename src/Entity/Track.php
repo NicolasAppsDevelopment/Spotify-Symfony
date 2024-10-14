@@ -36,17 +36,14 @@ class Track
     #[ORM\Column]
     private int $trackNumber;
     #[ORM\Column]
-    private string $type;
-    #[ORM\Column]
     private string $uri;
     #[ORM\Column(nullable: true)]
     private ?string $pictureLink;
-    #[ORM\ManyToMany(targetEntity: Artist::class)]
-    #[ORM\JoinTable(name: "track_artist")]
-    private Collection $artists;
-    #[ORM\ManyToMany(targetEntity: User::class)]
-    #[ORM\JoinTable(name: "track_user")]
-    private Collection $favoritedBy;
+    private array $artists = [];
+    private bool $isFavorite;
+    #[ORM\ManyToMany(targetEntity: User::class, mappedBy: "bookmarkedTracks")]
+    #[ORM\JoinTable(name: "user_track")]
+    private Collection $bookmarkedBy;
 
     public function __construct(
         int $discNumber,
@@ -61,11 +58,11 @@ class Track
         int $popularity,
         ?string $previewUrl,
         int $trackNumber,
-        string $type,
         string $uri,
         ?string $pictureLink,
-        Collection $artists = new ArrayCollection(),
-        Collection $favoritedBy = new ArrayCollection()
+        array $artists = [],
+        Collection $bookmarkedBy = new ArrayCollection(),
+        bool $isFavorite = false
     ) {
         $this->discNumber = $discNumber;
         $this->durationMs = $durationMs;
@@ -79,11 +76,11 @@ class Track
         $this->popularity = $popularity;
         $this->previewUrl = $previewUrl;
         $this->trackNumber = $trackNumber;
-        $this->type = $type;
         $this->uri = $uri;
         $this->pictureLink = $pictureLink;
         $this->artists = $artists;
-        $this->favoritedBy = $favoritedBy;
+        $this->bookmarkedBy = $bookmarkedBy;
+        $this->isFavorite = $isFavorite;
     }
 
     public function getId(): string
@@ -206,16 +203,6 @@ class Track
         $this->trackNumber = $trackNumber;
     }
 
-    public function getType(): string
-    {
-        return $this->type;
-    }
-
-    public function setType(string $type): void
-    {
-        $this->type = $type;
-    }
-
     public function getUri(): string
     {
         return $this->uri;
@@ -236,33 +223,27 @@ class Track
         $this->pictureLink = $pictureLink;
     }
 
-    public function getArtists(): Collection
+    public function getArtists(): array
     {
         return $this->artists;
     }
 
-    public function setArtists(Collection $artists): void
+    public function setArtists(array $artists): void
     {
         $this->artists = $artists;
     }
 
-    public function getFavoritedBy(): Collection
+    public function isFavorite(): bool
     {
-        return $this->favoritedBy;
+        return $this->isFavorite;
     }
 
-    public function setFavoritedBy(Collection $favoritedBy): void
-    {
-        $this->favoritedBy = $favoritedBy;
+    public function setIsFavorite(bool $isFavorite): void {
+        $this->isFavorite = $isFavorite;
     }
 
-    public function addArtist(Artist $artist): void
+    public function getBookmarkedBy(): Collection
     {
-        $this->artists->add($artist);
-    }
-
-    public function removeArtist(Artist $artist): void
-    {
-        $this->artists->removeElement($artist);
+        return $this->bookmarkedBy;
     }
 }

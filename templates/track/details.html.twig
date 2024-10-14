@@ -7,42 +7,42 @@
     <body>
         <div class="container">
             <div class="container-card">
-                <img src="{{ trackDetails.pictureLink }}">
-                <h1> {{ trackDetails.name }} </h1>
-                {% for artist in trackDetails.artists %}
+                <img src="{{ track.pictureLink }}">
+                <h1> {{ track.name }} </h1>
+                {% for artist in track.artists %}
                     <h2>{{ artist.name }}</h2>
                 {% endfor %}
-                <p> 🔥 Popularité : {{ trackDetails.popularity }}/100 </p>
-                <p> 🕓 Durée : {{ trackDetails.durationMs / 1000 }} secondes </p>
-                <p> 🎵 N° de piste : {{ trackDetails.trackNumber }} </p>
-                <p> 💿 N° du disque : {{ trackDetails.discNumber }} </p>
-                <p> 🔞 Restricition d'âge : {{ trackDetails.explicit ? "Oui" : "Non" }} </p>
+                <p> 🔥 Popularité : {{ track.popularity }}/100 </p>
+                <p> 🕓 Durée : {{ track.durationMs / 1000 }} secondes </p>
+                <p> 🎵 N° de piste : {{ track.trackNumber }} </p>
+                <p> 💿 N° du disque : {{ track.discNumber }} </p>
+                <p> 🔞 Restricition d'âge : {{ track.explicit ? "Oui" : "Non" }} </p>
 
                 <audio controls>
-                    <source src="{{ trackDetails.previewUrl }}">
+                    <source src="{{ track.previewUrl }}">
                 </audio>
 
-                <a href="{{ trackDetails.spotifyUrl }}">Afficher sur Spotify ></a>
+                <a href="{{ track.spotifyUrl }}">Afficher sur Spotify ></a>
 
-                <a href="{{ path((trackDetails.isFavorite ? "app_favorite_remove_track" : "app_favorite_add_track"), {"id": trackDetails.id}) }}">
-                    {{ trackDetails.isFavorite ? "🗑 Supprimer des" : "⭐️ Ajouter aux" }} favoris !
+                <a href="{{ path((track.isFavorite ? "app_favorite_remove_track" : "app_favorite_add_track"), {"id": track.id}) }}">
+                    {{ track.isFavorite ? "🗑 Supprimer des" : "⭐️ Ajouter aux" }} favoris !
                 </a>
             </div>
 
             <div class="container-card">
                 <h1>Recommendations</h1>
                 <div class="container">
-                    {% for item in recomandedTracks %}
-                        <a class="item" href="{{ path("app_track_details", {"id": item.id}) }}">
+                    {% for recommendedTrack in recommendedTracks %}
+                        <a class="item" href="{{ path("app_track_details", {"id": recommendedTrack.id}) }}">
                             <div class="overlay">
                                 <div>
-                                    <h2>{{ item.name }}</h2>
-                                    {% for artist in item.artists %}
+                                    <h2>{{ recommendedTrack.name }}</h2>
+                                    {% for artist in recommendedTrack.artists %}
                                         <h3>{{ artist.name }}</h3>
                                     {% endfor %}
                                 </div>
                             </div>
-                            <img class="background" src="{{ item.pictureLink }}" alt="image titre {{ item.name }}">
+                            <img class="background" src="{{ recommendedTrack.pictureLink }}" alt="image titre {{ recommendedTrack.name }}">
                         </a>
                     {% endfor %}
                 </div>

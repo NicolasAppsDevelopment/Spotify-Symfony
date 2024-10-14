@@ -3,27 +3,24 @@
 namespace App\Controller;
 
 use App\Entity\Track;
+use App\Entity\User;
 use App\Factory\TrackFactory;
-use App\Service\AuthSpotifyService;
+use App\Service\TrackService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class TrackController extends AbstractController
 {
-    private string $token;
-
-    public function __construct(private readonly AuthSpotifyService  $authSpotifyService,
+    public function __construct(private readonly TrackService  $trackService,
                                 private readonly HttpClientInterface $httpClient,
                                 private readonly TrackFactory        $trackFactory
-    )
-    {
-        $this->token = $this->authSpotifyService->auth();
-    }
+    ) {}
 
     #[Route('/track', name: 'app_track_index')]
     public function index(Request $request): Response
@@ -39,12 +36,7 @@ class TrackController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
-            $response = $this->httpClient->request('GET', 'https://api.spotify.com/v1/search?query=' . $data['query'] . '&type=track&locale=fr-FR', [
-                'headers' => [
-                    'Authorization' => 'Bearer ' . $this->token,
-                ],
-            ]);
-            $tracks = $this->trackFactory->createMultipleFromSpotifyData($response->toArray()['tracks']['items']);
+            $tracks = $this->trackService->query($data['query']);
         }
 
         return $this->render('track/index.html.twig', [
@@ -53,34 +45,31 @@ class TrackController extends AbstractController
         ]);
     }
 
-    #[Route('/track/details', name: 'app_track_details')]
-    public function details(Request $request, EntityManagerInterface $entityManager): Response
+    #[Route('/track/{id}', name: 'app_track_details')]
+    public function details(string $id, UserInterface $user, EntityManagerInterface $entityManager): Response
     {
-        $id = $request->get("id");
-
-        $responseDetails = $this->httpClient->request('GET', 'https://api.spotify.com/v1/tracks/' . $id, [
-            'headers' => [
-                'Authorization' => 'Bearer ' . $this->token,
-            ],
-        ]);
-        $trackDetails = $this->trackFactory->createSingleFromSpotifyData($responseDetails->toArray());
-
-        // Check if the track is already in the database
-        $favoriteTrack = $entityManager->getRepository(Track::class)->findOneBy(['id' => $id, 'isFavorite' => true]);
-        if ($favoriteTrack) {
-            $trackDetails->setIsFavorite(true);
+        // get User
+        $userInDB = $entityManager->getRepository(User::class)->findOneBy(['id' => $user->getUserIdentifier()]);
+        if (!$userInDB) {
+            return new Response("Not authorized", 401);
         }
 
-        $responseRecomanded = $this->httpClient->request('GET', 'https://api.spotify.com/v1/recommendations?seed_genres=&seed_artists=' . $trackDetails->getId() . '&seed_tracks=' . $trackDetails->getId(), [
-            'headers' => [
-                'Authorization' => 'Bearer ' . $this->token,
-            ],
-        ]);
-        $recomandedTracks = $this->trackFactory->createMultipleFromSpotifyData($responseRecomanded->toArray()['tracks']);
+        $track = $this->trackService->get($id);
+        if (!$track) {
+            return new Response("Not found", 404);
+        }
+
+        // Check if the track is already in the database
+        $isFavorite = $entityManager->getRepository(Track::class)->isBookmarkedByUser($id, $user->getUserIdentifier());
+        if ($isFavorite) {
+            $track->setIsFavorite(true);
+        }
+
+        $recommendedTracks = $this->trackService->recommandation($track->getId());
 
         return $this->render('track/details.html.twig', [
-            'trackDetails' => $trackDetails,
-            'recomandedTracks' => $recomandedTracks,
+            'track' => $track,
+            'recommendedTracks' => $recommendedTracks,
         ]);
     }
 }

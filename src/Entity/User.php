@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -30,6 +32,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\Column]
     private ?string $password = null;
+    #[ORM\ManyToMany(targetEntity: Track::class, inversedBy: "bookmarkedBy")]
+    #[ORM\JoinTable(name: "user_track")]
+    private Collection $bookmarkedTracks;
+    #[ORM\ManyToMany(targetEntity: Artist::class, inversedBy: "bookmarkedBy")]
+    #[ORM\JoinTable(name: "user_artist")]
+    private Collection $bookmarkedArtists;
+
+    public function __construct()
+    {
+        $this->bookmarkedTracks = new ArrayCollection();
+        $this->bookmarkedArtists = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -55,7 +69,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getUserIdentifier(): string
     {
-        return (string) $this->username;
+        return (string) $this->id;
     }
 
     /**
@@ -104,5 +118,43 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    public function getBookmarkedTracks(): Collection
+    {
+        return $this->bookmarkedTracks;
+    }
+
+    public function addBookmarkedTrack(Track $track): void
+    {
+        if (!$this->bookmarkedTracks->contains($track)) {
+            $this->bookmarkedTracks->add($track);
+        }
+    }
+
+    public function removeBookmarkedTrack(Track $track): void
+    {
+        if ($this->bookmarkedTracks->contains($track)) {
+            $this->bookmarkedTracks->removeElement($track);
+        }
+    }
+
+    public function getBookmarkedArtists(): Collection
+    {
+        return $this->bookmarkedArtists;
+    }
+
+    public function addBookmarkedArtist(Artist $artist): void
+    {
+        if (!$this->bookmarkedArtists->contains($artist)) {
+            $this->bookmarkedArtists->add($artist);
+        }
+    }
+
+    public function removeBookmarkedArtist(Artist $artist): void
+    {
+        if ($this->bookmarkedArtists->contains($artist)) {
+            $this->bookmarkedArtists->removeElement($artist);
+        }
     }
 }

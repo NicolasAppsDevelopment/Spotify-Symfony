@@ -3,27 +3,24 @@
 namespace App\Controller;
 
 use App\Entity\Artist;
+use App\Entity\User;
 use App\Factory\ArtistFactory;
-use App\Service\AuthSpotifyService;
+use App\Service\ArtistService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class ArtistController extends AbstractController
 {
-    private string $token;
-
-    public function __construct(private readonly AuthSpotifyService  $authSpotifyService,
+    public function __construct(private readonly ArtistService       $artistService,
                                 private readonly HttpClientInterface $httpClient,
-                                private readonly ArtistFactory        $artistFactory
-    )
-    {
-        $this->token = $this->authSpotifyService->auth();
-    }
+                                private readonly ArtistFactory       $artistFactory
+    ) {}
 
     #[Route('/artist', name: 'app_artist_index')]
     public function index(Request $request): Response
@@ -39,12 +36,7 @@ class ArtistController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
-            $response = $this->httpClient->request('GET', 'https://api.spotify.com/v1/search?query=' . $data['query'] . '&type=artist&locale=fr-FR', [
-                'headers' => [
-                    'Authorization' => 'Bearer ' . $this->token,
-                ],
-            ]);
-            $artists = $this->artistFactory->createMultipleFromSpotifyData($response->toArray()['artists']['items']);
+            $artists = $this->artistService->query($data['query']);
         }
 
         return $this->render('artist/index.html.twig', [
@@ -53,25 +45,27 @@ class ArtistController extends AbstractController
         ]);
     }
 
-    #[Route('/artist/details', name: 'app_artist_details')]
-    public function details(Request $request, EntityManagerInterface $entityManager): Response
+    #[Route('/artist/{id}', name: 'app_artist_details')]
+    public function details(string $id, UserInterface $user, EntityManagerInterface $entityManager): Response
     {
-        $id = $request->get("id");
+        // get User
+        $userInDB = $entityManager->getRepository(User::class)->findOneBy(['id' => $user->getUserIdentifier()]);
+        if (!$userInDB) {
+            return new Response("Not authorized", 401);
+        }
 
-        $responseDetails = $this->httpClient->request('GET', 'https://api.spotify.com/v1/artists/' . $id, [
-            'headers' => [
-                'Authorization' => 'Bearer ' . $this->token,
-            ],
-        ]);
-        $artistDetails = $this->artistFactory->createSingleFromSpotifyData($responseDetails->toArray());
+        $artist = $this->artistService->get($id);
+        if (!$artist) {
+            return new Response("Not found", 404);
+        }
 
-        $favoriteArtist = $entityManager->getRepository(Artist::class)->findOneBy(['id' => $artistDetails->getId(), 'isFavorite' => true]);
-        if ($favoriteArtist) {
-            $artistDetails->setIsFavorite(true);
+        $isFavorite = $entityManager->getRepository(Artist::class)->isBookmarkedByUser($id, $user->getUserIdentifier());
+        if ($isFavorite) {
+            $artist->setIsFavorite(true);
         }
 
         return $this->render('artist/details.html.twig', [
-            'artistDetails' => $artistDetails,
+            'artist' => $artist,
         ]);
     }
 }

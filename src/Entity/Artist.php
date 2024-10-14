@@ -2,44 +2,42 @@
 
 namespace App\Entity;
 
+use App\Repository\ArtistRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: ArtistRepository::class)]
 class Artist
 {
     #[ORM\Id]
     #[ORM\Column]
     private string $id;
-    #[ORM\Column]
     private bool $isFavorite;
     #[ORM\Column]
     private string $name;
-    #[ORM\Column]
-    private string $spotifyUrl;
-    #[ORM\ManyToMany(targetEntity: User::class)]
-    #[ORM\JoinTable(name: "artist_user")]
-    private Collection $favoritedBy;
     #[ORM\Column(nullable: true)]
     private ?string $pictureLink;
     #[ORM\Column(nullable: true)]
     private ?int $popularity;
+    #[ORM\ManyToMany(targetEntity: User::class, mappedBy: "bookmarkedArtists")]
+    #[ORM\JoinTable(name: "user_artist")]
+    private Collection $bookmarkedBy;
 
     public function __construct(
         string $id,
         string $name,
-        string $spotifyUrl,
         string $pictureLink = null,
         int $popularity = null,
-        Collection $favoritedBy = new ArrayCollection()
+        Collection $bookmarkedBy = new ArrayCollection(),
+        bool $isFavorite = false
     ) {
         $this->id = $id;
         $this->name = $name;
-        $this->spotifyUrl = $spotifyUrl;
         $this->pictureLink = $pictureLink;
         $this->popularity = $popularity;
-        $this->favoritedBy = $favoritedBy;
+        $this->bookmarkedBy = $bookmarkedBy;
+        $this->isFavorite = $isFavorite;
     }
 
     public function getId(): string
@@ -52,16 +50,6 @@ class Artist
         $this->id = $id;
     }
 
-    public function getFavoritedByUsers(): Collection
-    {
-        return $this->favoritedBy;
-    }
-
-    public function setFavoritedByUsers(Collection $favoritedBy): void
-    {
-        $this->favoritedBy = $favoritedBy;
-    }
-
     public function getName(): string
     {
         return $this->name;
@@ -70,16 +58,6 @@ class Artist
     public function setName(string $name): void
     {
         $this->name = $name;
-    }
-
-    public function getSpotifyUrl(): string
-    {
-        return $this->spotifyUrl;
-    }
-
-    public function setSpotifyUrl(string $spotifyUrl): void
-    {
-        $this->spotifyUrl = $spotifyUrl;
     }
 
     public function getPictureLink(): ?string
@@ -100,5 +78,20 @@ class Artist
     public function setPopularity(?int $popularity): void
     {
         $this->popularity = $popularity;
+    }
+
+    public function isFavorite(): bool
+    {
+        return $this->isFavorite;
+    }
+
+    public function setIsFavorite(bool $isFavorite): void
+    {
+        $this->isFavorite = $isFavorite;
+    }
+
+    public function getBookmarkedBy(): Collection
+    {
+        return $this->bookmarkedBy;
     }
 }

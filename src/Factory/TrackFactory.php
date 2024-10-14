@@ -3,7 +3,6 @@
 namespace App\Factory;
 
 use App\Entity\Track;
-use Doctrine\Common\Collections\ArrayCollection;
 
 class TrackFactory
 {
@@ -23,10 +22,9 @@ class TrackFactory
             $items['popularity'] ?? -1,
             $items['preview_url'] ?? null,
             $items['track_number'] ?? -1,
-            $items['type'] ?? "unknown",
             $items['uri'] ?? "",
             $items['album']['images'][0]["url"] ?? null,
-            new ArrayCollection($this->artistFactory->createMultipleFromSpotifyData($items['artists']) ?? []),
+            $this->artistFactory->createMultipleFromSpotifyData($items['artists']) ?? [],
         );
     }
 
@@ -34,7 +32,9 @@ class TrackFactory
     {
         $result = [];
         for ($i = 0; $i < count($items); $i++) {
-            $result[] = $this->createSingleFromSpotifyData($items[$i]);
+            if (is_array($items[$i])) {
+                $result[] = $this->createSingleFromSpotifyData($items[$i]);
+            }
         }
         return $result;
     }
