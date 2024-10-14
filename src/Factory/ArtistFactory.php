@@ -12,6 +12,8 @@ class ArtistFactory
             $items['id'] ?? "",
             $items['name'] ?? "",
             $items['uri'] ?? "",
+            $items['images'][0]['url'] ?? null,
+            $items['popularity'] ?? null,
         );
     }
 

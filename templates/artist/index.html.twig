@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <title>Rechercher</title>
+        <link href="{{ asset('styles/app.css') }}" rel="stylesheet"/>
+    </head>
+    <body>
+        <div class="search-form">
+            {{ form(searchForm) }}
+            <a href="{{ path('app_track_index') }}">Rechercher tracks</a>
+            <a href="{{ path('app_favorite_index') }}">Favoris</a>
+        </div>
+
+        <div class="container">
+            {% for artist in artists %}
+                <a class="item" href="{{ path("app_artist_details", {"id": artist.id}) }}">
+                    <div class="overlay">
+                        <div>
+                            <h2>{{ artist.name }}</h2>
+                        </div>
+                    </div>
+                    <img class="background" src="{{ artist.pictureLink }}" alt="image titre {{ artist.name }}">
+                </a>
+            {% endfor %}
+        </div>
+    </body>
+</html>

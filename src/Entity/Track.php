@@ -2,24 +2,51 @@
 
 namespace App\Entity;
 
+use App\Repository\TrackRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
+
+#[ORM\Entity(repositoryClass: TrackRepository::class)]
 class Track
 {
-    private int $discNumber;
-    private int $durationMs;
-    private bool $explicit;
-    private string $isrc;
-    private string $spotifyUrl;
-    private string $href;
+    #[ORM\Id]
+    #[ORM\Column]
     private string $id;
+    #[ORM\Column]
+    private int $discNumber;
+    #[ORM\Column]
+    private int $durationMs;
+    #[ORM\Column]
+    private bool $explicit;
+    #[ORM\Column]
+    private string $isrc;
+    #[ORM\Column]
+    private string $spotifyUrl;
+    #[ORM\Column]
+    private string $href;
+    #[ORM\Column]
     private bool $isLocal;
+    #[ORM\Column]
     private string $name;
+    #[ORM\Column]
     private int $popularity;
+    #[ORM\Column(nullable: true)]
     private ?string $previewUrl;
+    #[ORM\Column]
     private int $trackNumber;
+    #[ORM\Column]
     private string $type;
+    #[ORM\Column]
     private string $uri;
+    #[ORM\Column(nullable: true)]
     private ?string $pictureLink;
-    private array $artists;
+    #[ORM\ManyToMany(targetEntity: Artist::class)]
+    #[ORM\JoinTable(name: "track_artist")]
+    private Collection $artists;
+    #[ORM\ManyToMany(targetEntity: User::class)]
+    #[ORM\JoinTable(name: "track_user")]
+    private Collection $favoritedBy;
 
     public function __construct(
         int $discNumber,
@@ -37,7 +64,8 @@ class Track
         string $type,
         string $uri,
         ?string $pictureLink,
-        array $artists
+        Collection $artists = new ArrayCollection(),
+        Collection $favoritedBy = new ArrayCollection()
     ) {
         $this->discNumber = $discNumber;
         $this->durationMs = $durationMs;
@@ -55,37 +83,7 @@ class Track
         $this->uri = $uri;
         $this->pictureLink = $pictureLink;
         $this->artists = $artists;
-    }
-
-    // Getters for all properties
-    public function getDiscNumber(): int
-    {
-        return $this->discNumber;
-    }
-
-    public function getDurationMs(): int
-    {
-        return $this->durationMs;
-    }
-
-    public function isExplicit(): bool
-    {
-        return $this->explicit;
-    }
-
-    public function getIsrc(): string
-    {
-        return $this->isrc;
-    }
-
-    public function getSpotifyUrl(): string
-    {
-        return $this->spotifyUrl;
-    }
-
-    public function getHref(): string
-    {
-        return $this->href;
+        $this->favoritedBy = $favoritedBy;
     }
 
     public function getId(): string
@@ -93,9 +91,79 @@ class Track
         return $this->id;
     }
 
+    public function setId(string $id): void
+    {
+        $this->id = $id;
+    }
+
+    public function getDiscNumber(): int
+    {
+        return $this->discNumber;
+    }
+
+    public function setDiscNumber(int $discNumber): void
+    {
+        $this->discNumber = $discNumber;
+    }
+
+    public function getDurationMs(): int
+    {
+        return $this->durationMs;
+    }
+
+    public function setDurationMs(int $durationMs): void
+    {
+        $this->durationMs = $durationMs;
+    }
+
+    public function isExplicit(): bool
+    {
+        return $this->explicit;
+    }
+
+    public function setExplicit(bool $explicit): void
+    {
+        $this->explicit = $explicit;
+    }
+
+    public function getIsrc(): string
+    {
+        return $this->isrc;
+    }
+
+    public function setIsrc(string $isrc): void
+    {
+        $this->isrc = $isrc;
+    }
+
+    public function getSpotifyUrl(): string
+    {
+        return $this->spotifyUrl;
+    }
+
+    public function setSpotifyUrl(string $spotifyUrl): void
+    {
+        $this->spotifyUrl = $spotifyUrl;
+    }
+
+    public function getHref(): string
+    {
+        return $this->href;
+    }
+
+    public function setHref(string $href): void
+    {
+        $this->href = $href;
+    }
+
     public function isLocal(): bool
     {
         return $this->isLocal;
+    }
+
+    public function setIsLocal(bool $isLocal): void
+    {
+        $this->isLocal = $isLocal;
     }
 
     public function getName(): string
@@ -103,9 +171,19 @@ class Track
         return $this->name;
     }
 
+    public function setName(string $name): void
+    {
+        $this->name = $name;
+    }
+
     public function getPopularity(): int
     {
         return $this->popularity;
+    }
+
+    public function setPopularity(int $popularity): void
+    {
+        $this->popularity = $popularity;
     }
 
     public function getPreviewUrl(): ?string
@@ -113,9 +191,19 @@ class Track
         return $this->previewUrl;
     }
 
+    public function setPreviewUrl(?string $previewUrl): void
+    {
+        $this->previewUrl = $previewUrl;
+    }
+
     public function getTrackNumber(): int
     {
         return $this->trackNumber;
+    }
+
+    public function setTrackNumber(int $trackNumber): void
+    {
+        $this->trackNumber = $trackNumber;
     }
 
     public function getType(): string
@@ -123,18 +211,58 @@ class Track
         return $this->type;
     }
 
+    public function setType(string $type): void
+    {
+        $this->type = $type;
+    }
+
     public function getUri(): string
     {
         return $this->uri;
     }
 
-    public function getPictureLink(): string
+    public function setUri(string $uri): void
+    {
+        $this->uri = $uri;
+    }
+
+    public function getPictureLink(): ?string
     {
         return $this->pictureLink;
     }
 
-    public function getArtists(): array
+    public function setPictureLink(?string $pictureLink): void
+    {
+        $this->pictureLink = $pictureLink;
+    }
+
+    public function getArtists(): Collection
     {
         return $this->artists;
+    }
+
+    public function setArtists(Collection $artists): void
+    {
+        $this->artists = $artists;
+    }
+
+    public function getFavoritedBy(): Collection
+    {
+        return $this->favoritedBy;
+    }
+
+    public function setFavoritedBy(Collection $favoritedBy): void
+    {
+        $this->favoritedBy = $favoritedBy;
+    }
+
+    public function addArtist(Artist $artist): void
+    {
+        $this->artists->add($artist);
+    }
+
+    public function removeArtist(Artist $artist): void
+    {
+        $this->artists->removeElement($artist);
     }
 }

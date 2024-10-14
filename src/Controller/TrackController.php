@@ -2,9 +2,10 @@
 
 namespace App\Controller;
 
-use App\Factory\ArtistFactory;
+use App\Entity\Track;
 use App\Factory\TrackFactory;
 use App\Service\AuthSpotifyService;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,8 +19,7 @@ class TrackController extends AbstractController
 
     public function __construct(private readonly AuthSpotifyService  $authSpotifyService,
                                 private readonly HttpClientInterface $httpClient,
-                                private readonly TrackFactory        $trackFactory,
-                                private readonly ArtistFactory        $artistFactory
+                                private readonly TrackFactory        $trackFactory
     )
     {
         $this->token = $this->authSpotifyService->auth();
@@ -54,7 +54,7 @@ class TrackController extends AbstractController
     }
 
     #[Route('/track/details', name: 'app_track_details')]
-    public function details(Request $request): Response
+    public function details(Request $request, EntityManagerInterface $entityManager): Response
     {
         $id = $request->get("id");
 
@@ -63,18 +63,20 @@ class TrackController extends AbstractController
                 'Authorization' => 'Bearer ' . $this->token,
             ],
         ]);
-
         $trackDetails = $this->trackFactory->createSingleFromSpotifyData($responseDetails->toArray());
+
+        // Check if the track is already in the database
+        $favoriteTrack = $entityManager->getRepository(Track::class)->findOneBy(['id' => $id, 'isFavorite' => true]);
+        if ($favoriteTrack) {
+            $trackDetails->setIsFavorite(true);
+        }
 
         $responseRecomanded = $this->httpClient->request('GET', 'https://api.spotify.com/v1/recommendations?seed_genres=&seed_artists=' . $trackDetails->getId() . '&seed_tracks=' . $trackDetails->getId(), [
             'headers' => [
                 'Authorization' => 'Bearer ' . $this->token,
             ],
         ]);
-
-        $recomandedTracks = $this->artistFactory->createMultipleFromSpotifyData($responseRecomanded->toArray());
-
-        dd($recomandedTracks);
+        $recomandedTracks = $this->trackFactory->createMultipleFromSpotifyData($responseRecomanded->toArray()['tracks']);
 
         return $this->render('track/details.html.twig', [
             'trackDetails' => $trackDetails,

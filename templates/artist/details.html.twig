@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <title>Détails</title>
+        <link href="{{ asset('styles/app.css') }}" rel="stylesheet"/>
+    </head>
+    <body>
+        <div class="container">
+            <div class="container-card">
+                <img class="background" src="{{ artistDetails.pictureLink }}" alt="image titre {{ artistDetails.name }}">
+                <h1> {{ artistDetails.name }} </h1>
+                <p> 🔥 Popularité : {{ artistDetails.popularity }}/100 </p>
+
+                <a href="{{ path((artistDetails.isFavorite ? "app_favorite_remove_artist" : "app_favorite_add_artist"), {"id": artistDetails.id}) }}">
+                    {{ artistDetails.isFavorite ? "🗑 Supprimer des" : "⭐️ Ajouter aux" }} favoris !
+                </a>
+            </div>
+        </div>
+    </body>
+</html>

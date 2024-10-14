@@ -3,7 +3,7 @@
 namespace App\Factory;
 
 use App\Entity\Track;
-use App\Factory\ArtistFactory;
+use Doctrine\Common\Collections\ArrayCollection;
 
 class TrackFactory
 {
@@ -26,7 +26,7 @@ class TrackFactory
             $items['type'] ?? "unknown",
             $items['uri'] ?? "",
             $items['album']['images'][0]["url"] ?? null,
-            $this->artistFactory->createMultipleFromSpotifyData($items['artists']) ?? [],
+            new ArrayCollection($this->artistFactory->createMultipleFromSpotifyData($items['artists']) ?? []),
         );
     }
 
