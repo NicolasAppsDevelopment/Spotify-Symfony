@@ -28,7 +28,7 @@ class ArtistRepository extends ServiceEntityRepository
         return !is_null($query->getOneOrNullResult());
     }
 
-    public function getBookmarkedArtists(UserInterface $user): mixed
+    /*public function getBookmarkedArtists(UserInterface $user): mixed
     {
         $qb = $this->createQueryBuilder('a')
             ->innerJoin('a.bookmarkedBy', 'u')
@@ -38,5 +38,10 @@ class ArtistRepository extends ServiceEntityRepository
         $query = $qb->getQuery();
 
         return $query->execute();
+    }*/
+
+    public function getArtistById(string $artistId): ?Artist
+    {
+        return $this->findOneBy(['id' => $artistId]);
     }
 }

@@ -29,7 +29,7 @@ class TrackRepository extends ServiceEntityRepository
         return !is_null($query->setMaxResults(1)->getOneOrNullResult());
     }
 
-    public function getBookmarkedTracks(UserInterface $user): mixed
+    /*public function getBookmarkedTracks(UserInterface $user): mixed
     {
         $qb = $this->createQueryBuilder('t')
             ->innerJoin('t.bookmarkedBy', 'u')
@@ -39,5 +39,10 @@ class TrackRepository extends ServiceEntityRepository
         $query = $qb->getQuery();
 
         return $query->execute();
+    }*/
+
+    public function getTrackById(string $trackId): ?Track
+    {
+        return $this->findOneBy(['id' => $trackId]);
     }
 }

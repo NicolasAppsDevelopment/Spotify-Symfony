@@ -49,7 +49,7 @@ class TrackController extends AbstractController
     public function details(string $id, UserInterface $user, EntityManagerInterface $entityManager): Response
     {
         // get User
-        $userInDB = $entityManager->getRepository(User::class)->findOneBy(['id' => $user->getUserIdentifier()]);
+        $userInDB = $entityManager->getRepository(User::class)->getUserById($user->getUserIdentifier());
         if (!$userInDB) {
             return new Response("Not authorized", 401);
         }

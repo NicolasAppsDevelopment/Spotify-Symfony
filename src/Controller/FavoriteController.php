@@ -28,7 +28,7 @@ class FavoriteController extends AbstractController
     public function index(UserInterface $user, EntityManagerInterface $entityManager): Response
     {
         // get User
-        $userInDB = $entityManager->getRepository(User::class)->findOneBy(['id' => $user->getUserIdentifier()]);
+        $userInDB = $entityManager->getRepository(User::class)->getUserById($user->getUserIdentifier());
         if (!$userInDB) {
             return new Response("Not authorized", 401);
         }
@@ -46,13 +46,13 @@ class FavoriteController extends AbstractController
     public function addTrack(string $id, UserInterface $user, EntityManagerInterface $entityManager): Response
     {
         // get User
-        $userInDB = $entityManager->getRepository(User::class)->findOneBy(['id' => $user->getUserIdentifier()]);
+        $userInDB = $entityManager->getRepository(User::class)->getUserById($user->getUserIdentifier());
         if (!$userInDB) {
             return new Response("Not authorized", 401);
         }
 
         // Check if the track is already in the database
-        $trackInDB = $entityManager->getRepository(Track::class)->findOneBy(['id' => $id]);
+        $trackInDB = $entityManager->getRepository(Track::class)->getTrackById($id);
         if ($trackInDB) {
             $isFavorite = $userInDB->getBookmarkedTracks()->contains($trackInDB);
             if (!$isFavorite) {
@@ -77,13 +77,13 @@ class FavoriteController extends AbstractController
     public function removeTrack(string $id, UserInterface $user, EntityManagerInterface $entityManager): Response
     {
         // get User
-        $userInDB = $entityManager->getRepository(User::class)->findOneBy(['id' => $user->getUserIdentifier()]);
+        $userInDB = $entityManager->getRepository(User::class)->getUserById($user->getUserIdentifier());
         if (!$userInDB) {
             return new Response("Not authorized", 401);
         }
 
         // Check if the track is already in the database
-        $trackInDB = $entityManager->getRepository(Track::class)->findOneBy(['id' => $id]);
+        $trackInDB = $entityManager->getRepository(Track::class)->getTrackById($id);
         if ($trackInDB) {
             $isFavorite = $userInDB->getBookmarkedTracks()->contains($trackInDB);
             if ($isFavorite) {
@@ -104,13 +104,13 @@ class FavoriteController extends AbstractController
     public function addArtist(string $id, UserInterface $user, EntityManagerInterface $entityManager): Response
     {
         // get User
-        $userInDB = $entityManager->getRepository(User::class)->findOneBy(['id' => $user->getUserIdentifier()]);
+        $userInDB = $entityManager->getRepository(User::class)->getUserById($user->getUserIdentifier());
         if (!$userInDB) {
             return new Response("Not authorized", 401);
         }
 
         // Check if the artist is already in the database
-        $artistInDB = $entityManager->getRepository(Artist::class)->findOneBy(['id' => $id]);
+        $artistInDB = $entityManager->getRepository(Artist::class)->getArtistById($id);
 
         if ($artistInDB) {
             $isFavorite = $userInDB->getBookmarkedArtists()->contains($artistInDB);
@@ -136,13 +136,13 @@ class FavoriteController extends AbstractController
     public function removeArtist(string $id, UserInterface $user, EntityManagerInterface $entityManager): Response
     {
         // get User
-        $userInDB = $entityManager->getRepository(User::class)->findOneBy(['id' => $user->getUserIdentifier()]);
+        $userInDB = $entityManager->getRepository(User::class)->getUserById($user->getUserIdentifier());
         if (!$userInDB) {
             return new Response("Not authorized", 401);
         }
 
         // Check if the artist is already in the database
-        $artistInDB = $entityManager->getRepository(Artist::class)->findOneBy(['id' => $id]);
+        $artistInDB = $entityManager->getRepository(Artist::class)->getArtistById($id);
         if ($artistInDB) {
             $isFavorite = $userInDB->getBookmarkedArtists()->contains($artistInDB);
             if ($isFavorite) {
