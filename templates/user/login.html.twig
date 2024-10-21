@@ -4,11 +4,13 @@
     <title>Login</title>
     <link href="{{ asset('styles/app.css') }}" rel="stylesheet"/>
 </head>
-<body>
+<body class="centered">
 <div class="container-card">
-    <form method="post">
+    <form method="post" class="login-form">
         {% if error %}
-            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+            <div class="err_msg_container">
+                <p>{{ error.messageKey|trans(error.messageData, 'security') }}</p>
+            </div>
         {% endif %}
 
         {% if app.user %}

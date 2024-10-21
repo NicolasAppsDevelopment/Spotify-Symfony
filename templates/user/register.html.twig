@@ -1,21 +1,19 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <title>Login</title>
+    <title>Register</title>
     <link href="{{ asset('styles/app.css') }}" rel="stylesheet"/>
 </head>
-<body>
+<body class="centered">
 <div class="container-card">
-    <h1>Register</h1>
-
     {{ form_errors(registrationForm) }}
 
-    {{ form_start(registrationForm) }}
+    {{ form_start(registrationForm, {'attr': {'class': 'login-form'}}) }}
+        <h1 class="h3 mb-3 font-weight-normal">Please sign up</h1>
         {{ form_row(registrationForm.username) }}
         {{ form_row(registrationForm.plainPassword, {
             label: 'Password'
         }) }}
-        {{ form_row(registrationForm.agreeTerms) }}
 
         <button type="submit" class="btn">Register</button>
     {{ form_end(registrationForm) }}
