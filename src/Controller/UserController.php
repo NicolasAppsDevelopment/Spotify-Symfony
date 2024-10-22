@@ -7,6 +7,7 @@ use App\Form\RegistrationFormType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -44,12 +45,15 @@ class UserController extends AbstractController
             // encode the plain password
             $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
 
-            $entityManager->persist($user);
-            $entityManager->flush();
-
-            // do anything else you need here, like send an email
-
-            return $security->login($user, 'form_login', 'main');
+            // check if username already exist in the database
+            $existingUser = $entityManager->getRepository(User::class)->findOneBy(['username' => $user->getUsername()]);
+            if ($existingUser) {
+                $form->get('username')->addError(new FormError('This username is already taken.'));
+            } else {
+                $entityManager->persist($user);
+                $entityManager->flush();
+                return $security->login($user, 'form_login', 'main');
+            }
         }
 
         return $this->render('user/register.html.twig', [

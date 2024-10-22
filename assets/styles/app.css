@@ -148,7 +148,7 @@ body {
     margin: 20vw;
 }
 
-.login-form, .login-form > * {
+.login-form, .register-form div {
     display: flex;
     flex-direction: column;
     width: 100%;
@@ -176,7 +176,7 @@ body {
     margin: 0 0 1rem;
 }
 
-.login-form .err_msg_container {
+.login-form .err_msg_container, .register-form ul {
     display: flex;
     justify-content: center;
     background-color: rgba(255, 0, 0, 0.1);
@@ -184,8 +184,9 @@ body {
     margin: 1rem;
     padding: 0.5rem;
     border-radius: 100px;
+    list-style: none;
 }
 
-.login-form .err_msg_container > p {
+.login-form .err_msg_container > p, .register-form ul > li {
     margin: 0;
 }
