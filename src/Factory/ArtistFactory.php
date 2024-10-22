@@ -4,7 +4,7 @@ namespace App\Factory;
 
 use App\Entity\Artist;
 
-class ArtistFactory
+readonly class ArtistFactory
 {
     public function createSingleFromSpotifyData(mixed $items): Artist
     {

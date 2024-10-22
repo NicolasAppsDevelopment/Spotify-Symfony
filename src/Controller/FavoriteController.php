@@ -19,10 +19,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 class FavoriteController extends AbstractController
 {
     public function __construct(private readonly TrackService  $trackService,
-                                private readonly ArtistService  $artistService,
-                                private readonly HttpClientInterface $httpClient,
-                                private readonly TrackFactory        $trackFactory,
-                                private readonly ArtistFactory        $artistFactory
+                                private readonly ArtistService  $artistService
     ) {}
     #[Route('/favorite', name: 'app_favorite_index')]
     public function index(UserInterface $user, EntityManagerInterface $entityManager): Response

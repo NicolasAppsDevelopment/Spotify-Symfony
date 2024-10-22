@@ -4,9 +4,9 @@ namespace App\Factory;
 
 use App\Entity\Track;
 
-class TrackFactory
+readonly class TrackFactory
 {
-    public function __construct(private readonly ArtistFactory $artistFactory) {}
+    public function __construct(private ArtistFactory $artistFactory) {}
     public function createSingleFromSpotifyData(mixed $items): Track
     {
         return new Track(

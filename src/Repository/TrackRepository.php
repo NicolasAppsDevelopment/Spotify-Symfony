@@ -3,10 +3,8 @@
 namespace App\Repository;
 
 use App\Entity\Track;
-use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 class TrackRepository extends ServiceEntityRepository
 {
@@ -28,18 +26,6 @@ class TrackRepository extends ServiceEntityRepository
 
         return !is_null($query->setMaxResults(1)->getOneOrNullResult());
     }
-
-    /*public function getBookmarkedTracks(UserInterface $user): mixed
-    {
-        $qb = $this->createQueryBuilder('t')
-            ->innerJoin('t.bookmarkedBy', 'u')
-            ->where('u.id = :userId')
-            ->setParameter('userId', $user->getUserIdentifier());
-
-        $query = $qb->getQuery();
-
-        return $query->execute();
-    }*/
 
     public function getTrackById(string $trackId): ?Track
     {

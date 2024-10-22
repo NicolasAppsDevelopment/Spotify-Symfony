@@ -17,10 +17,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class TrackController extends AbstractController
 {
-    public function __construct(private readonly TrackService  $trackService,
-                                private readonly HttpClientInterface $httpClient,
-                                private readonly TrackFactory        $trackFactory
-    ) {}
+    public function __construct(private readonly TrackService $trackService) {}
 
     #[Route('/track', name: 'app_track_index')]
     public function index(Request $request): Response

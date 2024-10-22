@@ -5,6 +5,7 @@ namespace App\Service;
 use App\Entity\Artist;
 use App\Factory\ArtistFactory;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Throwable;
 
 class ArtistService
 {
@@ -26,7 +27,7 @@ class ArtistService
                 ],
             ]);
             return $this->artistFactory->createMultipleFromSpotifyData($response->toArray()['artists']['items']);
-        } catch (\Throwable $t) {
+        } catch (Throwable $t) {
             print($t->getMessage());
             return [];
         }
@@ -40,7 +41,7 @@ class ArtistService
                 ],
             ]);
             return $this->artistFactory->createSingleFromSpotifyData($responseDetails->toArray());
-        } catch (\Throwable $t) {
+        } catch (Throwable $t) {
             print($t->getMessage());
             return null;
         }

@@ -17,10 +17,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class ArtistController extends AbstractController
 {
-    public function __construct(private readonly ArtistService       $artistService,
-                                private readonly HttpClientInterface $httpClient,
-                                private readonly ArtistFactory       $artistFactory
-    ) {}
+    public function __construct(private readonly ArtistService $artistService) {}
 
     #[Route('/artist', name: 'app_artist_index')]
     public function index(Request $request): Response

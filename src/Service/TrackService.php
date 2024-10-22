@@ -4,12 +4,25 @@ namespace App\Service;
 
 use App\Entity\Track;
 use App\Factory\TrackFactory;
+use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Throwable;
 
 class TrackService
 {
     private string $token;
 
+    /**
+     * @throws TransportExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws DecodingExceptionInterface
+     * @throws ClientExceptionInterface
+     */
     public function __construct(private readonly AuthSpotifyService  $authSpotifyService,
                                 private readonly HttpClientInterface $httpClient,
                                 private readonly TrackFactory        $trackFactory
@@ -27,7 +40,7 @@ class TrackService
                 ],
             ]);
             return $this->trackFactory->createMultipleFromSpotifyData($response->toArray()['tracks']['items']);
-        } catch (\Throwable $t) {
+        } catch (Throwable $t) {
             print($t->getMessage());
             return [];
         }
@@ -42,7 +55,7 @@ class TrackService
                 ],
             ]);
             return $this->trackFactory->createMultipleFromSpotifyData($responseRecomanded->toArray()['tracks']);
-        } catch (\Throwable $t) {
+        } catch (Throwable $t) {
             print($t->getMessage());
             return [];
         }
@@ -57,7 +70,7 @@ class TrackService
                 ],
             ]);
             return $this->trackFactory->createSingleFromSpotifyData($responseDetails->toArray());
-        } catch (\Throwable $t) {
+        } catch (Throwable $t) {
             print($t->getMessage());
             return null;
         }
