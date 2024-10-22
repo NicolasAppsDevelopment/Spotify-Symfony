@@ -24,14 +24,15 @@
                     <source src="{{ track.previewUrl }}">
                 </audio>
 
-                <a href="{{ track.spotifyUrl }}">Show in Spotify ></a>
-                <a target="_blank" href="https://www.youtube.com/results?search_query={{ track.name }} {% for artist in track.artists %}{{ artist.name }} {% endfor %}">
-                    Search on YouTube >
-                </a>
-
-                <a href="{{ path((track.isFavorite ? "app_favorite_remove_track" : "app_favorite_add_track"), {"id": track.id}) }}">
-                    {{ track.isFavorite ? "🗑 Remove from" : "⭐️ Add to" }} favorites !
-                </a>
+                <div class="action-div">
+                    <a href="{{ track.spotifyUrl }}" class="rounded-btn">Show in Spotify</a>
+                    <a target="_blank" href="https://www.youtube.com/results?search_query={{ track.name }} {% for artist in track.artists %}{{ artist.name }} {% endfor %}" class="rounded-btn">
+                        Search on YouTube
+                    </a>
+                    <a href="{{ path((track.isFavorite ? "app_favorite_remove_track" : "app_favorite_add_track"), {"id": track.id}) }}" class="rounded-btn">
+                        {{ track.isFavorite ? "🗑 Remove from" : "⭐️ Add to" }} favorites !
+                    </a>
+                </div>
             </div>
 
             <div class="container-card">
