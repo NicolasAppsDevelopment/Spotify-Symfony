@@ -1,14 +1,11 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <title>Rechercher</title>
+    <title>Favorite | Symfy</title>
     <link href="{{ asset('styles/app.css') }}" rel="stylesheet"/>
 </head>
 <body>
-<div class="search-form">
-    <a href="{{ path('app_track_index') }}">Rechercher tracks</a>
-    <a href="{{ path('app_artist_index') }}">Rechercher artistes</a>
-</div>
+{{ component('TopMenu') }}
 <div class="container-card">
     <h2>Tracks</h2>
     <div class="container">

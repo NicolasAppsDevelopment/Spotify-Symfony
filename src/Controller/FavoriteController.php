@@ -70,7 +70,7 @@ class FavoriteController extends AbstractController
         }
 
         $entityManager->flush();
-        return new Response("Track added");
+        return $this->redirectToRoute('app_track_details', ['id' => $id]);
     }
 
     #[Route('/favorite/remove/track/{id}', name: 'app_favorite_remove_track')]
@@ -97,7 +97,7 @@ class FavoriteController extends AbstractController
 
         $entityManager->flush();
 
-        return new Response("Track removed");
+        return $this->redirectToRoute('app_track_details', ['id' => $id]);
     }
 
     #[Route('/favorite/add/artist/{id}', name: 'app_favorite_add_artist')]
@@ -129,7 +129,7 @@ class FavoriteController extends AbstractController
         }
 
         $entityManager->flush();
-        return new Response("Track added");
+        return $this->redirectToRoute('app_artist_details', ['id' => $id]);
     }
 
     #[Route('/favorite/remove/artist/{id}', name: 'app_favorite_remove_artist')]
@@ -156,6 +156,6 @@ class FavoriteController extends AbstractController
 
         $entityManager->flush();
 
-        return new Response("Artist removed");
+        return $this->redirectToRoute('app_artist_details', ['id' => $id]);
     }
 }

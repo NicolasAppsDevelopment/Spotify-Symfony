@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="fr">
     <head>
-        <title>Détails</title>
+        <title>Artist details | Symfy</title>
         <link href="{{ asset('styles/app.css') }}" rel="stylesheet"/>
     </head>
     <body>
+        {{ component('TopMenu') }}
+
         <div class="container">
             <div class="container-card">
                 <img class="background" src="{{ artist.pictureLink }}" alt="image titre {{ artist.name }}">

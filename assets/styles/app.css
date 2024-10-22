@@ -99,11 +99,11 @@ body {
 }
 
 .search-form {
-    width: 100%;
     padding: 2rem;
     background-color: var(--card-background-color);
     border-bottom: 1px solid var(--card-border-color);
     margin-bottom: 1rem;
+    margin-top: -1rem;
 }
 
 .search-form input {
@@ -112,7 +112,7 @@ body {
     border: 1px solid var(--card-hover-border-color);
     border-radius: 15px;
     color: var(--card-label-color);
-    width: calc(100% - 6rem);
+    width: calc(100% - 2rem);
 }
 
 .search-form label {
@@ -189,4 +189,39 @@ body {
 
 .login-form .err_msg_container > p, .register-form ul > li {
     margin: 0;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2rem;
+    background-color: var(--card-background-color);
+    box-shadow: 0 var(--card-box-shadow-1-y) var(--card-box-shadow-1-blur);
+    border-bottom: 1px solid var(--card-border-color);
+    gap: 2rem;
+    margin-bottom: 1rem;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--card-label-color);
+    text-decoration: none;
+    text-wrap: nowrap;
+}
+
+.nav-item:hover {
+    color: var(--card-hover-icon-color);
+    transform: scale(1.1);
+}
+
+.nav-item.red {
+    color: rgba(255, 0, 0, 0.8);
+    font-weight: bold;
+}
+
+.expanded {
+    width: 100%;
 }
