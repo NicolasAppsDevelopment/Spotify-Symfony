@@ -18,6 +18,9 @@
     --card-hover-icon-color: #29bc86;
     --card-hover-icon-background-color: rgba(52, 211, 153, 0.1);
     --card-hover-icon-border-color: rgba(52, 211, 153, 0.2);
+    --error-div-background-color: rgba(255, 0, 0, 0.1);
+    --error-div-border-color: rgba(255, 0, 0, 0.2);
+    --destruction-label-color: #da2515;
     --card-size: 20rem;
 }
 
@@ -173,8 +176,8 @@ body {
 .login-form .err_msg_container, .register-form ul {
     display: flex;
     justify-content: center;
-    background-color: rgba(255, 0, 0, 0.1);
-    border: 1px solid rgba(255, 0, 0, 0.2);
+    background-color: var(--error-div-background-color);
+    border: var(--error-div-border-color);
     margin: 1rem;
     padding: 0.5rem;
     border-radius: 100px;
@@ -212,7 +215,7 @@ body {
 }
 
 .nav-item.red {
-    color: rgba(255, 0, 0, 0.8);
+    color: var(--destruction-label-color);
     font-weight: bold;
 }
 
