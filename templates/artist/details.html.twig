@@ -14,7 +14,7 @@
                 <p> 🔥 Popularity: {{ artist.popularity }}/100 </p>
 
                 <a href="{{ path((artist.isFavorite ? "app_favorite_remove_artist" : "app_favorite_add_artist"), {"id": artist.id}) }}">
-                    {{ artist.isFavorite ? "🗑 Remove from" : "⭐️ Add to" }} favorite !
+                    {{ artist.isFavorite ? "🗑 Remove from" : "⭐️ Add to" }} favorites !
                 </a>
             </div>
         </div>

@@ -27,7 +27,7 @@
                 <a href="{{ track.spotifyUrl }}">Show in Spotify ></a>
 
                 <a href="{{ path((track.isFavorite ? "app_favorite_remove_track" : "app_favorite_add_track"), {"id": track.id}) }}">
-                    {{ track.isFavorite ? "🗑 Remove from" : "⭐️ Add to" }} favorite !
+                    {{ track.isFavorite ? "🗑 Remove from" : "⭐️ Add to" }} favorites !
                 </a>
             </div>
 

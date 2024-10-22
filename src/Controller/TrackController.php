@@ -30,7 +30,7 @@ class TrackController extends AbstractController
         $defaultData = ['query' => ''];
         $form = $this->createFormBuilder($defaultData)
             ->add('query', TextType::class, [
-                'attr' => ['placeholder' => 'Search for an artist'],
+                'attr' => ['placeholder' => 'Search for a track'],
             ])
             ->getForm();
 
