@@ -52,7 +52,7 @@ body {
     justify-content: center;
 
     background-color: var(--card-background-color);
-    box-shadow: 0px var(--card-box-shadow-1-y) var(--card-box-shadow-1-blur) var(--card-box-shadow-1), 0px var(--card-box-shadow-2-y) var(--card-box-shadow-2-blur) var(--card-box-shadow-2), 0 0 0 1px var(--card-border-color);
+    box-shadow: 0 var(--card-box-shadow-1-y) var(--card-box-shadow-1-blur) var(--card-box-shadow-1), 0 var(--card-box-shadow-2-y) var(--card-box-shadow-2-blur) var(--card-box-shadow-2), 0 0 0 1px var(--card-border-color);
     border-radius: 15px;
     position: relative;
     transition: 0.25s;
@@ -64,7 +64,7 @@ body {
 }
 
 .container > .item:hover {
-    box-shadow: 0px 3px 6px var(--card-hover-box-shadow-1), 0px var(--card-hover-box-shadow-2-y) var(--card-hover-box-shadow-2-blur) var(--card-hover-box-shadow-2), 0 0 0 1px var(--card-hover-border-color);
+    box-shadow: 0 3px 6px var(--card-hover-box-shadow-1), 0 var(--card-hover-box-shadow-2-y) var(--card-hover-box-shadow-2-blur) var(--card-hover-box-shadow-2), 0 0 0 1px var(--card-hover-border-color);
     background-color: var(--card-hover-icon-background-color);
     border-color: var(--card-hover-icon-border-color);
     color: var(--card-hover-icon-color);
@@ -145,7 +145,11 @@ body {
 }
 
 .centered > .container-card {
-    margin: 20vw;
+    margin: auto;
+}
+
+.container-card.small {
+    max-width: 25rem;
 }
 
 .login-form, .register-form div {
