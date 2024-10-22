@@ -9,12 +9,12 @@
 
         <div class="container">
             <div class="container-card">
-                <img class="background" src="{{ artist.pictureLink }}" alt="image titre {{ artist.name }}">
+                <img class="background" src="{{ artist.pictureLink }}" alt="image artist {{ artist.name }}">
                 <h1> {{ artist.name }} </h1>
-                <p> 🔥 Popularité : {{ artist.popularity }}/100 </p>
+                <p> 🔥 Popularity: {{ artist.popularity }}/100 </p>
 
                 <a href="{{ path((artist.isFavorite ? "app_favorite_remove_artist" : "app_favorite_add_artist"), {"id": artist.id}) }}">
-                    {{ artist.isFavorite ? "🗑 Supprimer des" : "⭐️ Ajouter aux" }} favoris !
+                    {{ artist.isFavorite ? "🗑 Remove from" : "⭐️ Add to" }} favorite !
                 </a>
             </div>
         </div>

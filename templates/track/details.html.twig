@@ -9,25 +9,25 @@
 
         <div class="container">
             <div class="container-card">
-                <img src="{{ track.pictureLink }}">
+                <img src="{{ track.pictureLink }}" alt="image track {{ track.name }}">
                 <h1> {{ track.name }} </h1>
                 {% for artist in track.artists %}
                     <h2>{{ artist.name }}</h2>
                 {% endfor %}
-                <p> 🔥 Popularité : {{ track.popularity }}/100 </p>
-                <p> 🕓 Durée : {{ track.durationMs / 1000 }} secondes </p>
-                <p> 🎵 N° de piste : {{ track.trackNumber }} </p>
-                <p> 💿 N° du disque : {{ track.discNumber }} </p>
-                <p> 🔞 Restricition d'âge : {{ track.explicit ? "Oui" : "Non" }} </p>
+                <p> 🔥 Popularity: {{ track.popularity }}/100 </p>
+                <p> 🕓 Duration: {{ track.durationMs / 1000 }} seconds </p>
+                <p> 🎵 Track number: {{ track.trackNumber }} </p>
+                <p> 💿 Disc number: {{ track.discNumber }} </p>
+                <p> 🔞 Is explicit: {{ track.explicit ? "Yes" : "No" }} </p>
 
                 <audio controls>
                     <source src="{{ track.previewUrl }}">
                 </audio>
 
-                <a href="{{ track.spotifyUrl }}">Afficher sur Spotify ></a>
+                <a href="{{ track.spotifyUrl }}">Show in Spotify ></a>
 
                 <a href="{{ path((track.isFavorite ? "app_favorite_remove_track" : "app_favorite_add_track"), {"id": track.id}) }}">
-                    {{ track.isFavorite ? "🗑 Supprimer des" : "⭐️ Ajouter aux" }} favoris !
+                    {{ track.isFavorite ? "🗑 Remove from" : "⭐️ Add to" }} favorite !
                 </a>
             </div>
 

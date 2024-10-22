@@ -225,3 +225,7 @@ body {
 .expanded {
     width: 100%;
 }
+
+p > a {
+    color: var(--card-hover-icon-color);
+}
