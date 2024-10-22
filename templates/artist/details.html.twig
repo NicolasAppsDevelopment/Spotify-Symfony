@@ -13,9 +13,11 @@
                 <h1> {{ artist.name }} </h1>
                 <p> 🔥 Popularity: {{ artist.popularity }}/100 </p>
 
-                <a href="{{ path((artist.isFavorite ? "app_favorite_remove_artist" : "app_favorite_add_artist"), {"id": artist.id}) }}">
-                    {{ artist.isFavorite ? "🗑 Remove from" : "⭐️ Add to" }} favorites !
-                </a>
+                <div class="action-div">
+                    <a class="rounded-btn" href="{{ path((artist.isFavorite ? "app_favorite_remove_artist" : "app_favorite_add_artist"), {"id": artist.id}) }}">
+                        {{ artist.isFavorite ? "🗑 Remove from" : "⭐️ Add to" }} favorites !
+                    </a>
+                </div>
             </div>
         </div>
     </body>
